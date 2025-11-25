@@ -222,17 +222,17 @@ markmap:
 - **Examples:**
 
   - **Table: Department**
-    | DeptID (PK) | DeptName     |
-    |-------------|--------------|
-    | D01         | IT           |
-    | D02         | Marketing    |
+    | DeptID (PK) | DeptName |
+    | :--- | :--- |
+    | D01 | IT |
+    | D02 | Marketing |
 
   - **Table: Employee**
-    | EmpID (PK) | Name  | DeptID (FK) | |
-    |------------|-------|-------------|------------|
-    | E001       | John  | D01         | ✅ Valid (D01 exists)|
-    | E002       | Mary  | D05         | ❌ ERROR (D05 doesn't exist)|
-    | E003       | Peter | NULL        | ✅ Valid (if NULL allowed)|
+    | EmpID (PK) | Name | DeptID (FK) | Status |
+    | :--- | :--- | :--- | :--- |
+    | E001 | John | D01 | ✅ Valid (D01 exists) |
+    | E002 | Mary | D05 | ❌ ERROR (D05 doesn't exist) |
+    | E003 | Peter | NULL | ✅ Valid (if NULL allowed) |
 
   - **VN Giải thích:** DeptID trong Employee phải tồn tại trong Department, nếu không sẽ lỗi
 
@@ -282,10 +282,10 @@ markmap:
 - **Example:**
 
   - **Table: Student**
-    | StudentID (PK) | Name      | DeptID (FK) |
-    |----------------|-----------|-------------|
-    | S001           | John Doe  | D01         |
-    | S002           | Mary Jane | D02         |
+    | StudentID (PK) | Name | DeptID (FK) |
+    | :--- | :--- | :--- |
+    | S001 | John Doe | D01 |
+    | S002 | Mary Jane | D02 |
 
 ### Candidate Key
 - **EN:** Attributes that can uniquely identify tuple
@@ -328,8 +328,8 @@ markmap:
 - **Example:**
   - **Bad design - Student with embedded Department info:**
     | StudentID | Name | DeptID | DeptName | DeptLocation |
-    |-----------|------|--------|----------|--------------|
-    | S001      | John | D01    | IT       | Building A   |
+    | :--- | :--- | :--- | :--- | :--- |
+    | S001 | John | D01 | IT | Building A |
 
   - **❌ Problem:** Cannot add new Department (D03 - Finance) if no student enrolled yet!
 
@@ -343,11 +343,11 @@ markmap:
 
 - **Example:**
   - **Table: Student**
-    | StudentID | Name | DeptName  | DeptLocation |
-    |-----------|------|-----------|--------------|
-    | S001      | John | IT        | Building A   |
-    | S002      | Mary | IT        | Building A   |
-    | S003      | Peter| IT        | Building A   |
+    | StudentID | Name | DeptName | DeptLocation |
+    | :--- | :--- | :--- | :--- |
+    | S001 | John | IT | Building A |
+    | S002 | Mary | IT | Building A |
+    | S003 | Peter | IT | Building A |
 
   - **❌ Problem:** If IT dept moves to Building B, must update 3 rows! Risk of inconsistency if miss one.
 
@@ -361,9 +361,9 @@ markmap:
 
 - **Example:**
   - **Table: Student**
-    | StudentID | Name  | CourseID | CourseName | InstructorName |
-    |-----------|-------|----------|------------|----------------|
-    | S001      | John  | C101     | Database   | Dr. Smith      |
+    | StudentID | Name | CourseID | CourseName | InstructorName |
+    | :--- | :--- | :--- | :--- | :--- |
+    | S001 | John | C101 | Database | Dr. Smith |
 
   - **❌ Problem:** If S001 drops C101, we lose information about course C101 and Dr. Smith!
 
@@ -417,11 +417,13 @@ markmap:
 
 ### 📋 Original Unnormalized Table (0NF)
 - **Table: StudentCourse**
-  - StudentID | StudentName | StudentEmail | CourseID | CourseName | Instructor | Grade | DeptID | DeptName | DeptLocation
-  - S001 | John Doe | john@email.com | C101 | Database | Dr. Smith | A | D01 | IT | Building A
-  - S001 | John Doe | john@email.com | C102 | Java | Dr. Jones | B+ | D01 | IT | Building A
-  - S002 | Mary Jane | mary@email.com | C101 | Database | Dr. Smith | A- | D02 | Marketing | Building B
-  - S002 | Mary Jane | mary@email.com | C103 | Python | Dr. Lee | B | D02 | Marketing | Building B
+  
+  | StudentID | StudentName | StudentEmail | CourseID | CourseName | Instructor | Grade | DeptID | DeptName | DeptLocation |
+  | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+  | S001 | John Doe | john@email.com | C101 | Database | Dr. Smith | A | D01 | IT | Building A |
+  | S001 | John Doe | john@email.com | C102 | Java | Dr. Jones | B+ | D01 | IT | Building A |
+  | S002 | Mary Jane | mary@email.com | C101 | Database | Dr. Smith | A- | D02 | Marketing | Building B |
+  | S002 | Mary Jane | mary@email.com | C103 | Python | Dr. Lee | B | D02 | Marketing | Building B |
 
 - **Problems (Vấn đề):**
   - ❌ **Redundancy:** StudentName, DeptName repeated many times
@@ -441,27 +443,36 @@ markmap:
 
 #### ❌ Violation Example
 - **Table: Student**
-  - StudentID: S001 | StudentName: John Doe | Skills: HTML, CSS, JS
-  - StudentID: S002 | StudentName: Mary Jane | Skills: Python, Java
+  | StudentID | StudentName | Skills |
+  | :--- | :--- | :--- |
+  | S001 | John Doe | HTML, CSS, JS |
+  | S002 | Mary Jane | Python, Java |
 - **Problem:** Skills column has multiple values (not atomic)
 
 #### ✅ Fixed to 1NF
 - **Option 1: Separate rows**
   - **Table: Student**
-    - S001 | John Doe | HTML
-    - S001 | John Doe | CSS
-    - S001 | John Doe | JS
-    - S002 | Mary Jane | Python
-    - S002 | Mary Jane | Java
+    | StudentID | StudentName | Skill |
+    | :--- | :--- | :--- |
+    | S001 | John Doe | HTML |
+    | S001 | John Doe | CSS |
+    | S001 | John Doe | JS |
+    | S002 | Mary Jane | Python |
+    | S002 | Mary Jane | Java |
 
 - **Option 2: Separate table**
   - **Table: Student**
-    - S001 | John Doe
-    - S002 | Mary Jane
+    | StudentID | StudentName |
+    | :--- | :--- |
+    | S001 | John Doe |
+    | S002 | Mary Jane |
+
   - **Table: Skill**
-    - S001 | HTML
-    - S001 | CSS
-    - S002 | Python
+    | StudentID | Skill |
+    | :--- | :--- |
+    | S001 | HTML |
+    | S001 | CSS |
+    | S002 | Python |
   - **VN Giải thích:** Mỗi cell chỉ chứa 1 giá trị duy nhất, không được chứa list
 
 ---
@@ -475,10 +486,11 @@ markmap:
 
 #### ❌ Not in 2NF
 - **Table: Enrollment**
-  - StudentID (PK) | CourseID (PK) | StudentName | StudentEmail | CourseName | Instructor | Grade
-  - S001 | C101 | John Doe | john@email.com | Database | Dr. Smith | A
-  - S001 | C102 | John Doe | john@email.com | Java | Dr. Jones | B+
-  - S002 | C101 | Mary Jane | mary@email.com | Database | Dr. Smith | A-
+  | StudentID (PK) | CourseID (PK) | StudentName | StudentEmail | CourseName | Instructor | Grade |
+  | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+  | S001 | C101 | John Doe | john@email.com | Database | Dr. Smith | A |
+  | S001 | C102 | John Doe | john@email.com | Java | Dr. Jones | B+ |
+  | S002 | C101 | Mary Jane | mary@email.com | Database | Dr. Smith | A- |
 
 - **Composite PK:** {StudentID, CourseID}
 
@@ -495,22 +507,25 @@ markmap:
 - **Split into 3 tables:**
 
 - **Table: Student**
-  - StudentID (PK) | StudentName | StudentEmail
-  - S001 | John Doe | john@email.com
-  - S002 | Mary Jane | mary@email.com
+  | StudentID (PK) | StudentName | StudentEmail |
+  | :--- | :--- | :--- |
+  | S001 | John Doe | john@email.com |
+  | S002 | Mary Jane | mary@email.com |
 
 - **Table: Course**
-  - CourseID (PK) | CourseName | Instructor
-  - C101 | Database | Dr. Smith
-  - C102 | Java | Dr. Jones
-  - C103 | Python | Dr. Lee
+  | CourseID (PK) | CourseName | Instructor |
+  | :--- | :--- | :--- |
+  | C101 | Database | Dr. Smith |
+  | C102 | Java | Dr. Jones |
+  | C103 | Python | Dr. Lee |
 
 - **Table: Enrollment**
-  - StudentID (PK, FK) | CourseID (PK, FK) | Grade
-  - S001 | C101 | A
-  - S001 | C102 | B+
-  - S002 | C101 | A-
-  - S002 | C103 | B
+  | StudentID (PK, FK) | CourseID (PK, FK) | Grade |
+  | :--- | :--- | :--- |
+  | S001 | C101 | A |
+  | S001 | C102 | B+ |
+  | S002 | C101 | A- |
+  | S002 | C103 | B |
 
 - **VN Giải thích:** Tách các thuộc tính chỉ phụ thuộc 1 phần khóa ra thành bảng riêng
 
@@ -525,10 +540,11 @@ markmap:
 
 #### ❌ Not in 3NF
 - **Table: Employee**
-  - EmpID (PK) | EmpName | DeptID | DeptName | DeptLocation
-  - E001 | John Doe | D01 | IT | Building A
-  - E002 | Mary Jane | D02 | Marketing | Building B
-  - E003 | Peter Lee | D01 | IT | Building A
+  | EmpID (PK) | EmpName | DeptID | DeptName | DeptLocation |
+  | :--- | :--- | :--- | :--- | :--- |
+  | E001 | John Doe | D01 | IT | Building A |
+  | E002 | Mary Jane | D02 | Marketing | Building B |
+  | E003 | Peter Lee | D01 | IT | Building A |
 
 - **Dependencies:**
   - EmpID → DeptID ✅ (direct)
@@ -542,15 +558,17 @@ markmap:
 
 #### ✅ Fixed to 3NF
 - **Table: Employee**
-  - EmpID (PK) | EmpName | DeptID (FK)
-  - E001 | John Doe | D01
-  - E002 | Mary Jane | D02
-  - E003 | Peter Lee | D01
+  | EmpID (PK) | EmpName | DeptID (FK) |
+  | :--- | :--- | :--- |
+  | E001 | John Doe | D01 |
+  | E002 | Mary Jane | D02 |
+  | E003 | Peter Lee | D01 |
 
 - **Table: Department**
-  - DeptID (PK) | DeptName | DeptLocation
-  - D01 | IT | Building A
-  - D02 | Marketing | Building B
+  | DeptID (PK) | DeptName | DeptLocation |
+  | :--- | :--- | :--- |
+  | D01 | IT | Building A |
+  | D02 | Marketing | Building B |
 
 - **VN Giải thích:** Tách các thuộc tính phụ thuộc bắc cầu ra bảng riêng. Bây giờ DeptName và DeptLocation chỉ phụ thuộc trực tiếp vào DeptID.
 
@@ -560,60 +578,61 @@ markmap:
 
 #### Starting with Unnormalized Data
 - **Table: Order**
-    | OrderID | OrderDate | CustomerName | CustomerPhone | ProductID | ProductName | Price | Quantity | SupplierName |
-    |---------|------------|--------------|---------------|-----------|-------------|-------|----------|--------------|
-    | O001    | 2024-01-15 | John Doe | 0912345678 | P101 | Laptop | 1000 | 2 | HP Inc |
-    | O001    | 2024-01-15 | John Doe | 0912345678 | P102 | Mouse | 20 | 3 | Logitech |
-    | O002    | 2024-01-16 | Mary Jane | 0987654321 | P101 | Laptop | 1000 | 1 | HP Inc |
+  | OrderID | OrderDate | CustomerName | CustomerPhone | ProductID | ProductName | Price | Quantity | SupplierName |
+  | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+  | O001 | 2024-01-15 | John Doe | 0912345678 | P101 | Laptop | 1000 | 2 | HP Inc |
+  | O001 | 2024-01-15 | John Doe | 0912345678 | P102 | Mouse | 20 | 3 | Logitech |
+  | O002 | 2024-01-16 | Mary Jane | 0987654321 | P101 | Laptop | 1000 | 1 | HP Inc |
 
 #### After 1NF
 - **VN:** Already in 1NF (all atomic values)
 
 #### After 2NF
 - **Table: Order**
-    | OrderID (PK) | OrderDate | CustomerName | CustomerPhone |
-    |--------------|------------|--------------|---------------|
-    | O001         | 2024-01-15 | John Doe     | 0912345678    |
-    | O002         | 2024-01-16 | Mary Jane    | 0987654321    |
+  | OrderID (PK) | OrderDate | CustomerName | CustomerPhone |
+  | :--- | :--- | :--- | :--- |
+  | O001 | 2024-01-15 | John Doe | 0912345678 |
+  | O002 | 2024-01-16 | Mary Jane | 0987654321 |
 
 - **Table: OrderDetail**
-    | OrderID (PK, FK) | ProductID (PK, FK) | Quantity |
-    |------------------|--------------------|----------|
-    | O001             | P101               | 2        |
-    | O001             | P102               | 3        |
-    | O002             | P101               | 1        |
+  | OrderID (PK, FK) | ProductID (PK, FK) | Quantity | ProductInfo* |
+  | :--- | :--- | :--- | :--- |
+  | O001 | P101 | 2 | (Laptop, 1000, HP Inc) |
+  | O001 | P102 | 3 | (Mouse, 20, Logitech) |
+  | O002 | P101 | 1 | (Laptop, 1000, HP Inc) |
+  *(Note: ProductInfo still has transitive dependency)*
 
 #### After 3NF
 - **Table: Customer**
-    | CustomerID (PK) | CustomerName | CustomerPhone |
-    |------------------|--------------|---------------|
-    | C001             | John Doe     | 0912345678    |
-    | C002             | Mary Jane    | 0987654321    |
+  | CustomerID (PK) | CustomerName | CustomerPhone |
+  | :--- | :--- | :--- |
+  | C001 | John Doe | 0912345678 |
+  | C002 | Mary Jane | 0987654321 |
 
 - **Table: Order**
-    | OrderID (PK) | OrderDate | CustomerID (FK) |
-    |--------------|------------|--------------|
-    | O001         | 2024-01-15 | C001         |
-    | O002         | 2024-01-16 | C002         |
+  | OrderID (PK) | OrderDate | CustomerID (FK) |
+  | :--- | :--- | :--- |
+  | O001 | 2024-01-15 | C001 |
+  | O002 | 2024-01-16 | C002 |
 
 - **Table: Product**
-    | ProductID (PK) | ProductName | Price | SupplierID (FK) |
-    |----------------|-------------|  -------|-------------------|
-    | P101           | Laptop      | 1000  | SUP001            |
-    | P102           | Mouse       | 20    | SUP002            |
+  | ProductID (PK) | ProductName | Price | SupplierID (FK) |
+  | :--- | :--- | :--- | :--- |
+  | P101 | Laptop | 1000 | SUP001 |
+  | P102 | Mouse | 20 | SUP002 |
 
 - **Table: Supplier**
-    | SupplierID (PK) | SupplierName |
-    |----------------|--------------|
-    | SUP001         | HP Inc        |
-    | SUP002         | Logitech     |
+  | SupplierID (PK) | SupplierName |
+  | :--- | :--- |
+  | SUP001 | HP Inc |
+  | SUP002 | Logitech |
 
 - **Table: OrderDetail**
-    | OrderID (PK, FK) | ProductID (PK, FK) | Quantity |
-    |------------------|--------------------|----------|
-    | O001             | P101               | 2        |
-    | O001             | P102               | 3        |
-    | O002             | P101               | 1        |
+  | OrderID (PK, FK) | ProductID (PK, FK) | Quantity |
+  | :--- | :--- | :--- |
+  | O001 | P101 | 2 |
+  | O001 | P102 | 3 |
+  | O002 | P101 | 1 |
 
 - **VN Giải thích:**
   - 2NF: Tách các thuộc tính chỉ phụ thuộc 1 phần composite key
@@ -991,4 +1010,3 @@ markmap:
 ### Question 10
 - **Question:** A table with composite values violates which normal form?
 - **Answer:** 1NF
-

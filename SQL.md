@@ -80,8 +80,8 @@ markmap:
 - **VN:** Ví dụ tạo bảng với đầy đủ ràng buộc
   ```sql
   CREATE TABLE Student (
-    studentID INT PRIMARY KEY AUTO_INCREMENT,
-    fullName VARCHAR(50) NOT NULL,
+    studentID INT PRIMARY KEY,
+    fullName VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE,
     deptID INT,
     FOREIGN KEY (deptID) REFERENCES Department(deptID)
@@ -95,13 +95,13 @@ markmap:
 #### Add Column
 - **VN:** Thêm cột mới vào bảng
   ```sql
-  ALTER TABLE Student ADD email VARCHAR(50);
+  ALTER TABLE Student ADD email VARCHAR(100);
   ```
 
 #### Modify Column
 - **VN:** Thay đổi kiểu dữ liệu hoặc kích thước cột
   ```sql
-  ALTER TABLE Student MODIFY email VARCHAR(100);
+  ALTER TABLE Student MODIFY email VARCHAR(150);
   ```
 
 #### Drop Column
@@ -133,23 +133,23 @@ markmap:
 #### Insert full row
 - **VN:** Thêm dòng mới với đầy đủ giá trị (theo thứ tự cột)
   ```sql
-  INSERT INTO Student VALUES (1, 'John', 'john@email.com', 3);
+  INSERT INTO Student VALUES (101, 'Nguyen Van A', 'Male', '2003-01-10', 1, 'a.nguyen@uni.edu');
   ```
 
 #### Insert specific columns
 - **VN:** Chỉ thêm giá trị cho một số cột cụ thể
   ```sql
   INSERT INTO Student (studentID, fullName)
-  VALUES (1, 'John');
+  VALUES (101, 'Nguyen Van A');
   ```
 
 #### Insert multiple rows
 - **VN:** Thêm nhiều dòng cùng lúc
   ```sql
   INSERT INTO Student (studentID, fullName) VALUES
-  (1, 'John'),
-  (2, 'Mary'),
-  (3, 'Peter');
+  (101, 'Nguyen Van A'),
+  (102, 'Tran Thi B'),
+  (103, 'Le Van C');
   ```
 
 ---
@@ -161,16 +161,16 @@ markmap:
 - **VN:** Cập nhật dữ liệu có sẵn
   ```sql
   UPDATE Student
-  SET fullName = 'Johnny'
-  WHERE studentID = 1;
+  SET fullName = 'Nguyen Van A (Updated)'
+  WHERE studentID = 101;
   ```
 
 #### Update multiple columns
 - **VN:** Cập nhật nhiều cột cùng lúc
   ```sql
   UPDATE Student
-  SET fullName = 'Johnny', email = 'johnny@email.com'
-  WHERE studentID = 1;
+  SET fullName = 'Nguyen Van A', email = 'new.email@uni.edu'
+  WHERE studentID = 101;
   ```
 
 ---
@@ -182,7 +182,7 @@ markmap:
 - **VN:** Xóa dữ liệu
   ```sql
   DELETE FROM Student
-  WHERE studentID = 1;
+  WHERE studentID = 101;
   ```
 
 #### Delete all rows (Keep structure)
@@ -218,14 +218,13 @@ markmap:
   - `/` - Chia
 - **Examples:**
   ```sql
-  SELECT productName, price, quantity, 
-         price * quantity AS total_cost
-  FROM Product;
+  SELECT courseName, credit, 
+         credit * 2 AS double_credit
+  FROM Course;
   
-  SELECT fullName, salary, 
-         salary * 12 AS annual_salary,
-         salary + 500 AS salary_bonus
-  FROM Employee;
+  SELECT studentID, score, 
+         score * 1.1 AS curved_score
+  FROM Enrollment;
   ```
 
 ---
@@ -234,7 +233,7 @@ markmap:
 - **EN:** Remove duplicates
 - **VN:** Loại bỏ các giá trị trùng lặp
   ```sql
-  SELECT DISTINCT department FROM Student;
+  SELECT DISTINCT deptID FROM Student;
   ```
 
 ---
@@ -276,7 +275,7 @@ markmap:
 - **VN:** Kết hợp nhiều điều kiện
   ```sql
   SELECT * FROM Student
-  WHERE age >= 18 AND department = 'IT';
+  WHERE gender = 'Male' AND deptID = 1;
   ```
 
 ---
@@ -286,15 +285,15 @@ markmap:
 #### BETWEEN
 - **VN:** Trong khoảng (bao gồm 2 đầu)
   ```sql
-  SELECT * FROM Student
-  WHERE age BETWEEN 18 AND 25;
+  SELECT * FROM Enrollment
+  WHERE score BETWEEN 80.0 AND 90.0;
   ```
 
 #### IN
 - **VN:** Thuộc một trong các giá trị cho trước
   ```sql
   SELECT * FROM Student
-  WHERE department IN ('IT', 'CS', 'Engineering');
+  WHERE deptID IN (1, 2, 3);
   ```
 
 #### LIKE (Pattern Matching)
@@ -335,10 +334,10 @@ markmap:
   ```
 
 ### Multiple Columns
-- **VN:** Sắp xếp theo phòng ban tăng dần, trong cùng phòng ban thì sắp theo tuổi giảm dần
+- **VN:** Sắp xếp theo phòng ban tăng dần, trong cùng phòng ban thì sắp theo tên giảm dần
   ```sql
   SELECT * FROM Student
-  ORDER BY department ASC, age DESC;
+  ORDER BY deptID ASC, fullName DESC;
   ```
 
 ---
@@ -358,20 +357,20 @@ markmap:
 - **VN:** Đếm số lượng
   ```sql
   SELECT COUNT(*) FROM Student;
-  SELECT COUNT(DISTINCT department) FROM Student;
+  SELECT COUNT(DISTINCT deptID) FROM Student;
   ```
 
 #### SUM and AVG
 - **VN:** Tính tổng và trung bình
   ```sql
-  SELECT SUM(salary) FROM Employee;
-  SELECT AVG(age) FROM Student;
+  SELECT SUM(credit) FROM Course;
+  SELECT AVG(score) FROM Enrollment;
   ```
 
 #### MIN and MAX
 - **VN:** Tìm giá trị nhỏ nhất và lớn nhất
   ```sql
-  SELECT MIN(age), MAX(age) FROM Student;
+  SELECT MIN(score), MAX(score) FROM Enrollment;
   ```
 
 ---
@@ -388,11 +387,11 @@ markmap:
   ```
 
 ### Multiple Columns Grouping
-- **VN:** Nhóm theo nhiều cột (phòng ban + giới tính)
+- **VN:** Nhóm theo nhiều cột
   ```sql
-  SELECT department, gender, AVG(salary)
-  FROM Employee
-  GROUP BY department, gender;
+  SELECT courseID, semester, AVG(score)
+  FROM Enrollment
+  GROUP BY courseID, semester;
   ```
 
 ---
@@ -407,17 +406,17 @@ markmap:
   SELECT deptID, COUNT(*) AS student_count
   FROM Student
   GROUP BY deptID
-  HAVING COUNT(*) > 50;
+  HAVING COUNT(*) > 5;
   ```
 
 ### Example: WHERE vs HAVING
 - **VN:** So sánh WHERE và HAVING
   ```sql
-  SELECT deptID, AVG(age) AS avg_age
+  SELECT deptID, COUNT(studentID) AS count
   FROM Student
-  WHERE age >= 18           -- Lọc TRƯỚC khi nhóm
+  WHERE gender = 'Female'   -- Lọc TRƯỚC khi nhóm (chỉ lấy nữ)
   GROUP BY deptID
-  HAVING AVG(age) > 20;     -- Lọc SAU khi nhóm
+  HAVING COUNT(studentID) > 2; -- Lọc SAU khi nhóm (nhóm có > 2 nữ)
   ```
 
 ---
@@ -438,18 +437,18 @@ markmap:
 - **VN:** Lấy TẤT CẢ từ bảng bên trái + dòng khớp từ bên phải
 - Nếu không khớp → giá trị bên phải là NULL
   ```sql
-  SELECT s.fullName, e.courseName
+  SELECT s.fullName, d.deptName
   FROM Student s
-  LEFT JOIN Enrollment e ON s.studentID = e.studentID;
+  LEFT JOIN Department d ON s.deptID = d.deptID;
   ```
 
 ### RIGHT JOIN (RIGHT OUTER JOIN)
 - **EN:** Returns all rows from right table + matching rows from left table
 - **VN:** Lấy TẤT CẢ từ bảng bên phải + dòng khớp từ bên trái
   ```sql
-  SELECT e.courseName, s.fullName
-  FROM Enrollment e
-  RIGHT JOIN Student s ON s.studentID = e.studentID;
+  SELECT d.deptName, s.fullName
+  FROM Student s
+  RIGHT JOIN Department d ON s.deptID = d.deptID;
   ```
 
 ### FULL OUTER JOIN
@@ -458,20 +457,12 @@ markmap:
   ```sql
   SELECT *
   FROM Student s
-  LEFT JOIN Enrollment e ON s.studentID = e.studentID
+  LEFT JOIN Department d ON s.deptID = d.deptID
   UNION
   SELECT *
   FROM Student s
-  RIGHT JOIN Enrollment e ON s.studentID = e.studentID;
+  RIGHT JOIN Department d ON s.deptID = d.deptID;
   ```
-
----
-
-### JOIN Visualization
-- **INNER JOIN:** ⚪ ∩ ⚪ (phần giao)
-- **LEFT JOIN:** ⚫ ∩ ⚪ (toàn bộ trái + giao)
-- **RIGHT JOIN:** ⚪ ∩ ⚫ (toàn bộ phải + giao)
-- **FULL OUTER JOIN:** ⚫ ∪ ⚫ (toàn bộ cả 2)
 
 ---
 
@@ -480,15 +471,14 @@ markmap:
 ### DateTime Functions (MySQL)
 
 #### Current Date/Time
-- `NOW()` - Current date and time (2024-01-15 14:30:00)
-- `CURDATE()` - Current date only (2024-01-15)
-- `CURTIME()` - Current time only (14:30:00)
+- `NOW()` - Current date and time
+- `CURDATE()` - Current date only
+- `CURTIME()` - Current time only
 
 #### Extract Parts
-- `YEAR(date)` - Extract year (2024)
-- `MONTH(date)` - Extract month (1-12)
-- `DAY(date)` - Extract day (1-31)
-- `HOUR(time)` - Extract hour (0-23)
+- `YEAR(date)` - Extract year
+- `MONTH(date)` - Extract month
+- `DAY(date)` - Extract day
 
 #### Date Calculations
 - `DATEDIFF(date1, date2)` - Difference in days
@@ -498,9 +488,9 @@ markmap:
 #### Examples
 - **VN:** Ví dụ sử dụng DateTime functions
   ```sql
-  SELECT NOW(), CURDATE(), CURTIME();
-  SELECT YEAR('2024-01-15') AS year;  -- 2024
-  SELECT DATEDIFF('2024-01-15', '2024-01-01');  -- 14
+  SELECT NOW(), CURDATE();
+  SELECT YEAR(dob) AS birth_year FROM Student;
+  SELECT DATEDIFF(NOW(), dob) / 365 AS age_approx FROM Student;
   ```
 
 ---
@@ -518,18 +508,12 @@ markmap:
 - `LENGTH(str)` - Độ dài chuỗi
 - `SUBSTRING(str, start, length)` - Cắt chuỗi con
 
-#### Trim
-- `TRIM(str)` - Xóa khoảng trắng 2 đầu
-- `LTRIM(str)` - Xóa khoảng trắng bên trái
-- `RTRIM(str)` - Xóa khoảng trắng bên phải
-
 #### Examples
 - **VN:** Ví dụ sử dụng String functions
   ```sql
-  SELECT UPPER('hello');  -- HELLO
-  SELECT CONCAT('John', ' ', 'Doe');  -- John Doe
-  SELECT LENGTH('Hello');  -- 5
-  SELECT SUBSTRING('Hello World', 1, 5);  -- Hello
+  SELECT UPPER(fullName);
+  SELECT CONCAT('Student: ', fullName);
+  SELECT LENGTH(email);
   ```
 
 ---
@@ -543,24 +527,24 @@ markmap:
 - Dùng để đơn giản hóa truy vấn phức tạp
 
 ### Create View
-- **VN:** Tạo view để dễ dàng truy vấn sinh viên đang học
+- **VN:** Tạo view để dễ dàng truy vấn sinh viên IT
   ```sql
-  CREATE VIEW ActiveStudents AS
+  CREATE VIEW ITStudents AS
   SELECT studentID, fullName, email
   FROM Student
-  WHERE status = 'active';
+  WHERE deptID = 1; -- Assuming 1 is IT/CS
   ```
 
 ### Use View
 - **VN:** Dùng view như một bảng thông thường
   ```sql
-  SELECT * FROM ActiveStudents;
+  SELECT * FROM ITStudents;
   ```
 
 ### Drop View
 - **VN:** Xóa view (không ảnh hưởng bảng gốc)
   ```sql
-  DROP VIEW ActiveStudents;
+  DROP VIEW ITStudents;
   ```
 
 ---
@@ -657,7 +641,7 @@ markmap:
 ### For SELECT Queries
 - **Đọc kỹ yêu cầu:**
   - "all students" → `SELECT *`
-  - "student names" → `SELECT name` hoặc `SELECT fullName`
+  - "student names" → `SELECT fullName`
   - "list of..." → có thể cần DISTINCT
   
 - **Thứ tự thực thi:**
@@ -701,11 +685,11 @@ markmap:
 - **Example:**
 
 ```sql
-SELECT deptID, AVG(salary)
-FROM Employee
-WHERE salary > 1000      -- Lọc trước: chỉ lấy lương > 1000
+SELECT deptID, AVG(score)
+FROM Enrollment
+WHERE score > 50      -- Lọc trước
 GROUP BY deptID
-HAVING AVG(salary) > 1500;  -- Lọc sau: nhóm có TB lương > 1500
+HAVING AVG(score) > 80;  -- Lọc sau
 ```
 
 ---
@@ -778,27 +762,29 @@ HAVING AVG(salary) > 1500;  -- Lọc sau: nhóm có TB lương > 1500
 
 **Table: Student**
 - studentID (PK) INT
-- fullName VARCHAR(50)
+- fullName VARCHAR(100)
+- gender VARCHAR(10)
+- dob DATE
 - email VARCHAR(100)
-- age INT
 - deptID (FK) INT
 
 **Table: Department**
 - deptID (PK) INT
-- deptName VARCHAR(50)
+- deptName VARCHAR(100)
 - location VARCHAR(50)
-
-**Table: Enrollment**
-- enrollmentID (PK) INT
-- studentID (FK) INT
-- courseID (FK) INT
-- grade CHAR(2)
-- enrollDate DATE
 
 **Table: Course**
 - courseID (PK) INT
-- courseName VARCHAR(50)
-- credits INT
+- courseName VARCHAR(100)
+- credit INT
+- deptID (FK) INT
+
+**Table: Enrollment**
+- enrollID (PK) INT
+- studentID (FK) INT
+- courseID (FK) INT
+- semester VARCHAR(10)
+- score DECIMAL(4,2)
 
 ---
 
@@ -807,11 +793,12 @@ HAVING AVG(salary) > 1500;  -- Lọc sau: nhóm có TB lương > 1500
 - **Answer:**
   ```sql
   CREATE TABLE Student (
-    studentID INT PRIMARY KEY AUTO_INCREMENT,
-    fullName VARCHAR(50) NOT NULL,
-    email VARCHAR(100) UNIQUE,
-    age INT CHECK(age >= 0),
+    studentID INT PRIMARY KEY,
+    fullName VARCHAR(100) NOT NULL,
+    gender VARCHAR(10),
+    dob DATE,
     deptID INT,
+    email VARCHAR(100),
     FOREIGN KEY (deptID) REFERENCES Department(deptID)
   );
   ```
@@ -819,45 +806,43 @@ HAVING AVG(salary) > 1500;  -- Lọc sau: nhóm có TB lương > 1500
 ---
 
 ### Practice Question 2: DML - INSERT
-- **Question:** Insert a new student: ID=1, Name="John Doe", Email="john@email.com", Age=20, DeptID=1
+- **Question:** Insert a new student: ID=120, Name="John Doe", Gender="Male", DOB="2004-01-01", DeptID=1, Email="john@uni.edu"
 - **Answer:**
   ```sql
-  INSERT INTO Student (studentID, fullName, email, age, deptID)
-  VALUES (1, 'John Doe', 'john@email.com', 20, 1);
+  INSERT INTO Student (studentID, fullName, gender, dob, deptID, email)
+  VALUES (120, 'John Doe', 'Male', '2004-01-01', 1, 'john@uni.edu');
   ```
 
 ---
 
 ### Practice Question 3: DML - UPDATE
-- **Question:** Update email of student with ID=1 to "johndoe@email.com"
-- ⚠️ **CRITICAL:** Phải có WHERE! Nếu không có → update tất cả!
+- **Question:** Update email of student with ID=120 to "johndoe@email.com"
 - **Answer:**
   ```sql
   UPDATE Student
   SET email = 'johndoe@email.com'
-  WHERE studentID = 1;
+  WHERE studentID = 120;
   ```
 
 ---
 
 ### Practice Question 4: DML - DELETE
-- **Question:** Delete student with age less than 18
-- ⚠️ **CRITICAL:** Phải có WHERE! Nếu không có → xóa tất cả!
+- **Question:** Delete student with ID 120
 - **Answer:**
   ```sql
   DELETE FROM Student
-  WHERE age < 18;
+  WHERE studentID = 120;
   ```
 
 ---
 
 ### Practice Question 5: Basic SELECT
-- **Question:** List all student names and their ages, sorted by age descending
+- **Question:** List all student names and their birth dates, sorted by name
 - **Answer:**
   ```sql
-  SELECT fullName, age
+  SELECT fullName, dob
   FROM Student
-  ORDER BY age DESC;
+  ORDER BY fullName ASC;
   ```
 
 ---
@@ -906,22 +891,22 @@ HAVING AVG(salary) > 1500;  -- Lọc sau: nhóm có TB lương > 1500
 ---
 
 ### Practice Question 10: GROUP BY with HAVING
-- **Question:** Find departments that have more than 50 students
+- **Question:** Find departments that have more than 5 students
 - **Answer:**
   ```sql
   SELECT deptID, COUNT(*) AS student_count
   FROM Student
   GROUP BY deptID
-  HAVING COUNT(*) > 50;
+  HAVING COUNT(*) > 5;
   ```
 
 ---
 
 ### Practice Question 11: Multiple JOINs
-- **Question:** List student names, course names, and grades
+- **Question:** List student names, course names, and scores
 - **Answer:**
   ```sql
-  SELECT s.fullName, c.courseName, e.grade
+  SELECT s.fullName, c.courseName, e.score
   FROM Student s
   INNER JOIN Enrollment e ON s.studentID = e.studentID
   INNER JOIN Course c ON e.courseID = c.courseID;
@@ -930,37 +915,39 @@ HAVING AVG(salary) > 1500;  -- Lọc sau: nhóm có TB lương > 1500
 ---
 
 ### Practice Question 12: Aggregate with JOIN
-- **Question:** Find average age of students in each department (show department name)
+- **Question:** Find average score of students in each department (show department name)
 - **Answer:**
   ```sql
-  SELECT d.deptName, AVG(s.age) AS avg_age
-  FROM Student s
-  INNER JOIN Department d ON s.deptID = d.deptID
+  SELECT d.deptName, AVG(e.score) AS avg_score
+  FROM Department d
+  INNER JOIN Student s ON d.deptID = s.deptID
+  INNER JOIN Enrollment e ON s.studentID = e.studentID
   GROUP BY d.deptName;
   ```
 
 ---
 
 ### Practice Question 13: WHERE vs HAVING
-- **Question:** Find departments where students older than 20 have average age > 22
+- **Question:** Find departments where male students have average score > 80
 - **Answer:**
   ```sql
-  SELECT deptID, AVG(age) AS avg_age
-  FROM Student
-  WHERE age > 20            -- Lọc trước: chỉ lấy sinh viên > 20 tuổi
-  GROUP BY deptID
-  HAVING AVG(age) > 22;     -- Lọc sau: nhóm có TB tuổi > 22
+  SELECT d.deptID, AVG(e.score) AS avg_score
+  FROM Student s
+  INNER JOIN Enrollment e ON s.studentID = e.studentID
+  WHERE s.gender = 'Male'    -- Filter before grouping
+  GROUP BY d.deptID
+  HAVING AVG(e.score) > 80;  -- Filter after grouping
   ```
 
 ---
 
 ### Practice Question 14: DateTime Functions
-- **Question:** Find enrollments in year 2024
+- **Question:** Find students born in year 2003
 - **Answer:**
   ```sql
   SELECT *
-  FROM Enrollment
-  WHERE YEAR(enrollDate) = 2024;
+  FROM Student
+  WHERE YEAR(dob) = 2003;
   ```
 
 ---
@@ -977,132 +964,25 @@ HAVING AVG(salary) > 1500;  -- Lọc sau: nhóm có TB lương > 1500
 ---
 
 ### Practice Question 16: CREATE VIEW
-- **Question:** Create a view showing students with age >= 18
+- **Question:** Create a view showing high performing enrollments (score >= 90)
 - **Answer:**
   ```sql
-  CREATE VIEW AdultStudents AS
-  SELECT studentID, fullName, age
-  FROM Student
-  WHERE age >= 18;
+  CREATE VIEW HighScores AS
+  SELECT studentID, courseID, score
+  FROM Enrollment
+  WHERE score >= 90;
   ```
 
 ---
 
 ### Practice Question 17: Complex Query
-- **Question:** Find department names and count of students, but only show departments with location in "Building A" and having more than 10 students. Sort by student count descending
+- **Question:** Find department names and count of courses, but only show departments located in 'Building A1' or 'Building A2' that offer more than 1 course.
 - **Answer:**
   ```sql
-  SELECT d.deptName, COUNT(s.studentID) AS student_count
+  SELECT d.deptName, COUNT(c.courseID) AS course_count
   FROM Department d
-  INNER JOIN Student s ON d.deptID = s.deptID
-  WHERE d.location = 'Building A'
+  INNER JOIN Course c ON d.deptID = c.deptID
+  WHERE d.location IN ('Building A1', 'Building A2')
   GROUP BY d.deptName
-  HAVING COUNT(s.studentID) > 10
-  ORDER BY student_count DESC;
-  ```
-
----
-
-## 🎓 Quick Reference Card (Thẻ tham khảo nhanh)
-
-### DDL Quick Reference
-- **VN:** Tổng hợp lệnh DDL
-  ```sql
-  -- Create Database
-  CREATE DATABASE dbname;
-  
-  -- Create Table
-  CREATE TABLE tablename (
-    column1 datatype PRIMARY KEY,
-    column2 datatype NOT NULL,
-    column3 datatype UNIQUE,
-    FOREIGN KEY (column) REFERENCES table(column)
-  );
-  
-  -- Alter Table
-  ALTER TABLE tablename ADD columnname datatype;
-  ALTER TABLE tablename MODIFY columnname datatype;
-  ALTER TABLE tablename DROP COLUMN columnname;
-  
-  -- Drop Table
-  DROP TABLE tablename;
-  ```
-
----
-
-### DML Quick Reference
-- **VN:** Tổng hợp lệnh DML
-  ```sql
-  -- Insert
-  INSERT INTO table VALUES (val1, val2, ...);
-  INSERT INTO table (col1, col2) VALUES (val1, val2);
-  
-  -- Update ⚠️ ALWAYS USE WHERE!
-  UPDATE table
-  SET column = value
-  WHERE condition;
-  
-  -- Delete ⚠️ ALWAYS USE WHERE!
-  DELETE FROM table
-  WHERE condition;
-  ```
-
----
-
-### SELECT Quick Reference
-- **VN:** Tổng hợp lệnh SELECT
-  ```sql
-  -- Basic Select
-  SELECT * FROM table;
-  SELECT col1, col2 FROM table;
-  SELECT DISTINCT column FROM table;
-  
-  -- With WHERE
-  SELECT * FROM table
-  WHERE condition;
-  
-  -- With ORDER BY
-  SELECT * FROM table
-  ORDER BY column ASC/DESC;
-  
-  -- With JOIN
-  SELECT t1.col, t2.col
-  FROM table1 t1
-  INNER/LEFT/RIGHT JOIN table2 t2 ON t1.key = t2.key;
-  
-  -- With GROUP BY
-  SELECT column, COUNT(*)
-  FROM table
-  GROUP BY column
-  HAVING COUNT(*) > value;
-  ```
-
----
-
-### Operators Quick Reference
-- **VN:** Tổng hợp toán tử
-  ```sql
-  -- Comparison: =, <>, >, <, >=, <=
-  -- Logical: AND, OR, NOT
-  -- Special:
-    BETWEEN val1 AND val2
-    IN (val1, val2, val3)
-    LIKE 'pattern%'
-    IS NULL / IS NOT NULL
-  -- Arithmetic: +, -, *, /
-  ```
-
----
-
-### Functions Quick Reference
-- **VN:** Tổng hợp hàm thường dùng
-  ```sql
-  -- Aggregate
-  COUNT(*), SUM(col), AVG(col), MIN(col), MAX(col)
-  
-  -- DateTime
-  NOW(), CURDATE(), YEAR(date), MONTH(date), DATEDIFF(d1, d2)
-  
-  -- String
-  UPPER(str), LOWER(str), CONCAT(s1, s2), LENGTH(str), SUBSTRING(str, start, len)
+  HAVING COUNT(c.courseID) > 1;
   ```
