@@ -61,16 +61,7 @@
 ## Part 2: Short Answer (5.0 points)
 
 ### Question 1: ER Diagram Design (1.5 pts)
-**Scenario:** A **Hospital Management System** needs to store data.
-- **Doctors** have a DoctorID, Name, and Specialization.
-- **Patients** have a PatientID, Name, and DateOfBirth.
-- Doctors **treat** Patients.
-  - A Doctor can treat many Patients.
-  - A Patient is treated by exactly one primary Doctor.
-- Patients are **assigned** to a **Ward** (Room).
-  - A Ward has WardID and Location.
-  - A Ward can have many Patients.
-  - A Patient belongs to exactly one Ward.
+**Scenario:** A Hospital Management System needs to store data about its operations. The system tracks doctors with their specializations and the patients they care for. Each patient is treated by a primary doctor. Furthermore, patients are admitted to specific wards, and the system must record which ward each patient is assigned to, ensuring proper bed management.
 
 **Task:** Draw the ER Diagram (Entity names, Attributes, Relationships, Cardinalities).
 
@@ -95,8 +86,9 @@
 
 1. **(DDL)** Write a SQL statement to add a column `phoneNumber` (VARCHAR 15) to the `Student` table.
 2. **(DML)** Increase the `score` by 1.0 for all enrollments in the semester '2023A'.
-3. **(SELECT)** List the `fullName` of students and the `courseName` of courses they have enrolled in, but ONLY for students in the "Computer Science" department (Assume `deptID=1` for CS).
-4. **(SELECT)** Calculate the average score for each course (`courseID`), showing `courseID` and `avg_score`, but only for courses with an average score greater than 80.
+3. **(SELECT from singgle table)**  List all student is male
+4. **(SELECT)** List the `fullName` of students and the `courseName` of courses they have enrolled in, but ONLY for students in the "Computer Science" department (Assume `deptID=1` for CS).
+5. **(SELECT)** Calculate the average score for each course (`courseID`), showing `courseID` and `avg_score`, but only for courses with an average score greater than 80.
 
 ---
 ---

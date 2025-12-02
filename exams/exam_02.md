@@ -59,13 +59,7 @@
 ## Part 2: Short Answer (5.0 points)
 
 ### Question 1: ER Diagram Design (1.5 pts)
-**Scenario:** A **Bookstore System**.
-- **Authors** (AuthorID, Name) write **Books** (ISBN, Title).
-  - An Author can write many Books.
-  - A Book can be written by many Authors.
-- **Publishers** (PubID, Name) publish **Books**.
-  - A Publisher publishes many Books.
-  - A Book is published by exactly one Publisher.
+**Scenario:** A Bookstore System requires a database to manage authors, books, and publishers. The system needs to track which authors wrote which books, handling cases where books have multiple authors. Additionally, it stores information about publishers and links them to the books they have published, ensuring every book is associated with a publisher.
 
 **Task:** Draw/Describe the ER Diagram, specifically mentioning how to handle the Many-to-Many relationship.
 

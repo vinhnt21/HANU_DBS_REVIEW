@@ -59,16 +59,7 @@
 ## Part 2: Short Answer (5.0 points)
 
 ### Question 1: ER Diagram Design (1.5 pts)
-**Scenario:** A **University Course System**.
-- **Professors** (ProfID, Name, Email) teach **Classes**.
-- **Courses** (CourseID, Title, Credits) are offered as **Classes**.
-  - A Course can have many Classes (different sections/semesters).
-  - A Class belongs to exactly one Course.
-  - A Class is taught by one Professor.
-  - A Professor can teach many Classes.
-- **Students** enroll in **Classes**.
-  - M:N relationship between Student and Class.
-  - Needs to track `Grade` for each enrollment.
+**Scenario:** A University Course System manages academic data including professors, courses, and students. The system records which professor teaches which class sections of a course. It also tracks student enrollments in these classes, allowing for grade recording for each student in each class they take.
 
 **Task:** Draw/Describe the ER Diagram, identifying entities, relationships, and any bridge tables needed.
 

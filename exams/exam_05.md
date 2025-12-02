@@ -59,13 +59,7 @@
 ## Part 2: Short Answer (5.0 points)
 
 ### Question 1: ER Diagram Design (1.5 pts)
-**Scenario:** A **Hotel Booking System**.
-- **Guests** (GuestID, Name, Phone).
-- **Rooms** (RoomNumber, Type, Price).
-- Guests make **Reservations** for Rooms.
-  - A Guest can make many reservations.
-  - A Room can be reserved many times (on different dates).
-  - A Reservation tracks `CheckInDate` and `CheckOutDate`.
+**Scenario:** A Hotel Booking System manages guest stays and room availability. The system maintains records of guests and hotel rooms. It tracks reservations made by guests for specific rooms, recording the duration of each stay including check-in and check-out dates to manage room occupancy.
 
 **Task:** Draw/Describe the ER Diagram. What is the Primary Key for the Reservation entity/table?
 

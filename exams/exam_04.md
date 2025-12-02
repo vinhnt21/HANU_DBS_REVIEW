@@ -59,13 +59,7 @@
 ## Part 2: Short Answer (5.0 points)
 
 ### Question 1: ER Diagram Design (1.5 pts)
-**Scenario:** An **E-commerce System**.
-- **Customers** (CustID, Name, Address) place **Orders**.
-- **Orders** (OrderID, Date) contain **Products**.
-- **Products** (ProdID, Name, Price).
-- An Order belongs to one Customer. A Customer can place many Orders.
-- An Order can contain many Products, and a Product can be in many Orders.
-- We need to store the `Quantity` of each product in an order.
+**Scenario:** An E-commerce System is designed to handle sales. It stores information about customers and the orders they place. Each order consists of various products, and the system needs to track the quantity of each product purchased in an order, linking customers, orders, and products effectively.
 
 **Task:** Draw/Describe the ER Diagram and the schema for the Order-Product relationship.
 
